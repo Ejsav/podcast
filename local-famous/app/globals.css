@@ -1,0 +1,371 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────
+   Local Famous · Editorial Design System
+   Light = paper · Dark = ink
+   ───────────────────────────────────────────── */
+
+:root {
+  /* Light · paper */
+  --bg: 245 241 232;          /* warm cream */
+  --surface: 255 252 244;
+  --surface-2: 237 232 220;
+  --surface-3: 226 220 207;
+
+  --ink: 22 20 18;            /* deep ink */
+  --ink-muted: 90 85 77;
+  --ink-subtle: 139 133 124;
+
+  --rule: 22 20 18;           /* used at /10 alpha */
+  --rule-strong: 22 20 18;    /* used at /18 alpha */
+
+  --accent: 232 70 40;        /* flag red-orange */
+  --accent-soft: 254 232 224;
+  --accent-fg: 255 252 244;
+
+  --success: 38 110 65;
+  --live: 220 38 38;
+
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Header total = top strip (28px) + main bar (64px) + 1px border */
+  --header-h: 93px;
+
+  /* Safe-area helpers — fall back to 0 on non-iOS */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  color-scheme: light;
+}
+
+@media (min-width: 768px) {
+  :root { --header-h: 93px; }
+}
+
+.dark {
+  /* Dark · ink */
+  --bg: 14 13 11;
+  --surface: 24 22 19;
+  --surface-2: 35 32 28;
+  --surface-3: 50 46 40;
+
+  --ink: 240 237 230;
+  --ink-muted: 168 162 153;
+  --ink-subtle: 107 102 93;
+
+  --rule: 240 237 230;
+  --rule-strong: 240 237 230;
+
+  --accent: 255 110 61;       /* slightly warmer for dark */
+  --accent-soft: 60 28 18;
+  --accent-fg: 14 13 11;
+
+  --success: 110 195 138;
+  --live: 248 113 113;
+
+  color-scheme: dark;
+}
+
+/* No-flash theme bootstrap is handled inline in <head> */
+
+* {
+  border-color: rgb(var(--rule) / 0.12);
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "ss02", "cv11";
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Native smooth-scroll for in-page anchors only — fast and respects reduced-motion */
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 12px);
+  /* Improve touch responsiveness on iOS */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: none;
+}
+
+body {
+  background-color: rgb(var(--bg));
+  color: rgb(var(--ink));
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  font-synthesis: none;
+  /* Prevent horizontal overflow on phones from large display headlines */
+  overflow-x: clip;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+img, svg, video { max-width: 100%; height: auto; }
+
+/* Disable hover transforms on touch devices to avoid sticky hover */
+@media (hover: none) {
+  a:hover, button:hover { transform: none !important; }
+}
+
+::selection {
+  background: rgb(var(--accent));
+  color: rgb(var(--accent-fg));
+}
+
+/* ─── Containers ─── */
+.container-app {
+  width: 100%;
+  max-width: 88rem;
+  margin-inline: auto;
+  /* Mobile-first: 16px gutter on phones, breathes up to 48px on desktop */
+  padding-inline: clamp(1rem, 3.5vw, 3rem);
+}
+
+/* Sticky offset for filter bars below the fixed header */
+.sticky-below-header {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 20;
+}
+
+/* Safe-area aware bottom padding for fixed bars (iOS home indicator) */
+.pb-safe { padding-bottom: max(0.75rem, var(--safe-bottom)); }
+.pt-safe { padding-top: max(0.75rem, var(--safe-top)); }
+
+/* Full-viewport that respects iOS dynamic toolbar */
+.h-dvh { height: 100dvh; }
+.min-h-dvh { min-height: 100dvh; }
+
+.container-prose {
+  width: 100%;
+  max-width: 42rem;
+  margin-inline: auto;
+}
+
+/* ─── Editorial primitives ─── */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgb(var(--ink-muted));
+}
+
+.eyebrow::before {
+  content: "";
+  width: 1.25rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+.serif {
+  font-family: var(--font-serif);
+  font-feature-settings: "liga", "dlig", "kern";
+}
+
+.serif-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-feature-settings: "liga", "dlig";
+}
+
+.rule-t { border-top: 1px solid rgb(var(--rule) / 0.14); }
+.rule-b { border-bottom: 1px solid rgb(var(--rule) / 0.14); }
+
+/* Editorial section divider with optical correction */
+.editorial-divider {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 1rem;
+  border-block: 1px solid rgb(var(--rule) / 0.14);
+}
+
+/* ─── Buttons ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.75rem;
+  padding-inline: 1.25rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  transition: transform 0.25s var(--ease-editorial),
+              background-color 0.2s ease, color 0.2s ease,
+              border-color 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(0.98); }
+
+.btn-primary {
+  background: rgb(var(--ink));
+  color: rgb(var(--bg));
+}
+.btn-primary:hover { background: rgb(var(--accent)); color: rgb(var(--accent-fg)); }
+
+.btn-accent {
+  background: rgb(var(--accent));
+  color: rgb(var(--accent-fg));
+}
+.btn-accent:hover { box-shadow: 0 0 0 4px rgb(var(--accent) / 0.18); }
+
+.btn-ghost {
+  background: transparent;
+  color: rgb(var(--ink));
+  border: 1px solid rgb(var(--rule) / 0.18);
+}
+.btn-ghost:hover { background: rgb(var(--surface-2)); border-color: rgb(var(--rule) / 0.32); }
+
+/* ─── Tag / chip ─── */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  height: 1.5rem;
+  padding-inline: 0.625rem;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgb(var(--ink));
+  background: rgb(var(--surface-2));
+  border: 1px solid rgb(var(--rule) / 0.10);
+}
+
+/* ─── Display type helpers ─── */
+.display {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+.display em,
+.display .accent {
+  font-style: italic;
+  color: rgb(var(--accent));
+  font-feature-settings: "dlig", "liga", "swsh";
+}
+
+/* Drop cap on first paragraph in prose */
+.prose-editorial > p:first-of-type::first-letter {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 4.5em;
+  line-height: 0.85;
+  float: left;
+  padding: 0.05em 0.12em 0 0;
+  color: rgb(var(--accent));
+}
+
+.prose-editorial p {
+  margin-block: 1.1em;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: rgb(var(--ink) / 0.92);
+  text-wrap: pretty;
+  hyphens: auto;
+}
+
+/* ─── Marquee track ─── */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+/* ─── Scroll-driven reveal ─── */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.9s var(--ease-editorial),
+    transform 0.9s var(--ease-editorial);
+}
+[data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+[data-reveal-stagger] > * { transition-delay: calc(var(--i, 0) * 60ms); }
+
+/* ─── Custom focus ring ─── */
+:where(a, button, [role="button"], input, textarea, select):focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ─── Min touch targets for mobile accessibility ─── */
+@media (pointer: coarse) {
+  button, [role="button"], a.btn { min-height: 40px; }
+}
+
+/* ─── Scrollbar refinement ─── */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--ink) / 0.18);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgb(var(--ink) / 0.30); }
+
+/* ─── View Transitions ─── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.45s;
+  animation-timing-function: var(--ease-editorial);
+}
+::view-transition-old(root) {
+  animation-name: vt-fade-out;
+}
+::view-transition-new(root) {
+  animation-name: vt-fade-in;
+}
+@keyframes vt-fade-out { to { opacity: 0; transform: translateY(-6px); } }
+@keyframes vt-fade-in { from { opacity: 0; transform: translateY(8px); } }
+
+/* ─── Print stylesheet for episodes ─── */
+@media print {
+  body { background: white; color: black; }
+  nav, footer, [data-print-hide] { display: none !important; }
+  .prose-editorial { max-width: none; }
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Noise overlay (cheap CSS texture) ─── */
+.noise-layer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.42 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size: 200px 200px;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  z-index: 1;
+}
+.dark .noise-layer::before { mix-blend-mode: screen; opacity: 0.18; }
